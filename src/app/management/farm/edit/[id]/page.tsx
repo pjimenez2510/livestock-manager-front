@@ -10,7 +10,10 @@ interface EditFarmPageProps {
 export default async function Page({ params }: EditFarmPageProps) {
   return (
     <ContentLayout title="Editar finca">
-      <EditFarmView id={Number(params?.id)} />
+      <div className="flex flex-col w-full items-center justify-center gap-4">
+        <h2 className="text-xl font-bold">Editar la finca</h2>
+        <EditFarmView id={Number(params?.id)} />
+      </div>
     </ContentLayout>
   );
 }

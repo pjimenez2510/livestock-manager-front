@@ -1,6 +1,11 @@
 import AxiosClient from "../infrastructure/http/AxiosClient";
 
-export abstract class BaseHttpService<T, CreateParams, UpdateParams> {
+export abstract class BaseHttpService<
+  T,
+  CreateParams,
+  UpdateParams,
+  FilterParams
+> {
   protected http: AxiosClient;
   protected abstract baseUrl: string;
   constructor() {
@@ -11,7 +16,8 @@ export abstract class BaseHttpService<T, CreateParams, UpdateParams> {
     T,
     CreateParams,
     UpdateParams,
-    S extends BaseHttpService<T, CreateParams, UpdateParams>
+    FilterParams,
+    S extends BaseHttpService<T, CreateParams, UpdateParams, FilterParams>
   >(this: new () => S): S {
     return new this();
   }
@@ -22,8 +28,8 @@ export abstract class BaseHttpService<T, CreateParams, UpdateParams> {
     return data.data;
   }
 
-  async getAll(): Promise<T[]> {
-    const { data } = await this.http.get<T[]>(this.baseUrl);
+  async getAll(params?: FilterParams): Promise<T[]> {
+    const { data } = await this.http.get<T[]>(this.baseUrl, { params });
     return data.data;
   }
 

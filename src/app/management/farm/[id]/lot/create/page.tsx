@@ -1,35 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ContentLayout } from "@/core/layout/content/content-layout";
+import NewLotView from "@/features/lots/presentation/views/new-lot-view";
 
 export default function CreatePage() {
   return (
-    <ContentLayout title="Nueva finca">
+    <ContentLayout title="Nuevo lote">
       <div className="flex flex-col w-full items-center justify-center gap-4">
-        Crear nueva finca
-        <form className="flex flex-col lg:min-w-96 items-center justify-center gap-4">
-          <div className="mt-1 w-full">
-            <Label htmlFor="name" className="ml-1 ">
-              Nombre
-            </Label>
-            <Input id="name" className="mt-1" />
-          </div>
-          <div className="mt-1 w-full">
-            <Label htmlFor="description" className="ml-1 ">
-              Descripción
-            </Label>
-            <Input id="description" className="mt-1" />
-          </div>
-          <div className="mt-1 w-full">
-            <Label htmlFor="address" className="ml-1 ">
-              Dirección
-            </Label>
-            <Input id="address" className="mt-1" />
-          </div>
-
-          <Button type="submit">Guardar</Button>
-        </form>
+        <h2 className="text-xl font-bold">Crear nueva lote</h2>
+        <NewLotView />
       </div>
     </ContentLayout>
   );

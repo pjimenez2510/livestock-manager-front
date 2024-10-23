@@ -21,8 +21,7 @@ export const FarmProvider: React.FC<FarmProviderProps> = ({
       redirect("/management/farm");
     }
     setFarm({ farm: farmParams });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [farmParams]);
+  }, [farmParams, setFarm]);
 
   if (loading)
     return <ContentLayout title="Cargando finca...">Cargando...</ContentLayout>;

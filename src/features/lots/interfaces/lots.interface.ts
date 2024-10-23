@@ -6,9 +6,9 @@ export enum Purpose {
 
 export interface LotBase {
   name: string;
-  address: string;
   purpose: Purpose;
   dimension: number;
+  farmId: number;
 }
 
 export interface Lot extends LotBase {

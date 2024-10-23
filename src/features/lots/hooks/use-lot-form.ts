@@ -12,7 +12,6 @@ import { useFarmStore } from "@/features/farms/context/use-farm-store";
 
 const schema = z.object({
   name: z.string().min(1, "El nombre de la finca es requerida"),
-  address: z.string().min(1, "La dirección es requerida"),
   purpose: z.enum([Purpose.DualPurpose, Purpose.Meat, Purpose.Milk], {
     message: "El proposito es requerido",
   }),
@@ -34,13 +33,13 @@ export const useLotForm = ({ lot }: LotFormProps) => {
     resolver: zodResolver(schema),
     defaultValues: {
       name: lot?.name || "",
-      address: lot?.address || "",
       dimension: lot?.dimension || undefined,
       purpose: lot?.purpose || undefined,
     },
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    if (!farm) return;
     if (lot) {
       await LotService.getInstance()
         .update(lot.id, data)
@@ -54,7 +53,7 @@ export const useLotForm = ({ lot }: LotFormProps) => {
       return;
     }
     await LotService.getInstance()
-      .create(data)
+      .create({ ...data, farmId: farm?.id })
       .then(() => {
         queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.LOTS] });
         router.push(`/management/farm/${farm?.id}/lot/list`);

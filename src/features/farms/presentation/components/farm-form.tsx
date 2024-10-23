@@ -24,11 +24,11 @@ export const FarmForm = ({ farm }: FarmFormProps) => {
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
-        className="flex flex-col items-center gap- w-full3"
+        className="flex flex-col items-center w-full max-w-xl"
       >
         <RHFInput name="name" label="Nombre de la finca" />
         <RHFInput name="address" label="Dirección" />
-        <RHFInput name="dimension" label="Dimension" />
+        <RHFInput name="dimension" label="Dimension en hectareas" />
         <RHFSelect name="purpose" label="Propósito" options={purposeOptions} />
         <Button disabled={isSubmiting} type="submit">
           {isSubmiting ? <LoadingSpinner /> : "Guardar"}

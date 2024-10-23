@@ -24,11 +24,10 @@ export const LotForm = ({ lot }: LotFormProps) => {
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
-        className="flex flex-col items-center gap- w-full3"
+        className="flex flex-col items-center w-full max-w-xl"
       >
-        <RHFInput name="name" label="Nombre del lot" />
-        <RHFInput name="address" label="Dirección" />
-        <RHFInput name="dimension" label="Dimension" />
+        <RHFInput name="name" label="Nombre del lote" />
+        <RHFInput name="dimension" label="Dimension en hectareas" />
         <RHFSelect name="purpose" label="Propósito" options={purposeOptions} />
         <Button disabled={isSubmiting} type="submit">
           {isSubmiting ? <LoadingSpinner /> : "Guardar"}

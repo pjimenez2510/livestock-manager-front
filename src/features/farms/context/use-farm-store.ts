@@ -6,13 +6,13 @@ interface SetFarmParams {
   idFarm?: number;
 }
 interface FarmStore {
-  farm: Farm | null;
+  farm?: Farm;
   loading: boolean;
   setFarm: ({ farm, idFarm }: SetFarmParams) => void;
 }
 
 export const useFarmStore = create<FarmStore>((set) => ({
-  farm: null,
+  farm: undefined,
   loading: true,
   error: null,
   setFarm: async ({ idFarm, farm }) => {
@@ -24,13 +24,13 @@ export const useFarmStore = create<FarmStore>((set) => ({
       return;
     }
     set({
-      farm: null,
+      farm: undefined,
       loading: true,
     });
 
     if (!idFarm) {
       set({
-        farm: null,
+        farm: undefined,
         loading: false,
       });
       return;
@@ -46,7 +46,7 @@ export const useFarmStore = create<FarmStore>((set) => ({
       })
       .catch((error) => {
         set({
-          farm: null,
+          farm: undefined,
           loading: false,
         });
         console.error(error);

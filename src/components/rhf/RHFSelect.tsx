@@ -63,7 +63,7 @@ const RHFSelect: React.FC<RHFSelectProps> = ({
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <p className="mt-1 text-sm text-red-500">
+            <p className="text-sm text-red-500">
               &nbsp;{getErrorMessage(name)}
             </p>
           </>

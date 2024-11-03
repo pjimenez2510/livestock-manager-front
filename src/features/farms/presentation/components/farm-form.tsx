@@ -28,7 +28,11 @@ export const FarmForm = ({ farm }: FarmFormProps) => {
       >
         <RHFInput name="name" label="Nombre de la finca" />
         <RHFInput name="address" label="Dirección" />
-        <RHFInput name="dimension" label="Dimension en hectareas" />
+        <RHFInput
+          name="dimension"
+          label="Dimension en hectareas"
+          type="number"
+        />
         <RHFSelect name="purpose" label="Propósito" options={purposeOptions} />
         <Button disabled={isSubmiting} type="submit">
           {isSubmiting ? <LoadingSpinner /> : "Guardar"}

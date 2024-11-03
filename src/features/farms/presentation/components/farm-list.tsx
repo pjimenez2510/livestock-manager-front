@@ -1,8 +1,8 @@
 "use client";
+import { FaPlus } from "react-icons/fa6";
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Plus } from "lucide-react";
 import { useFarmsQuery } from "../../hooks/use-farm-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
@@ -44,7 +44,7 @@ const FarmList = () => {
               variant={"outline"}
               onClick={() => router.push("/management/farm/create")}
             >
-              <Plus className="h-4 w-4" />
+              <FaPlus className="h-4 w-4" />
             </Button>
           </>
         )}

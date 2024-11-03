@@ -1,11 +1,14 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Grid2X2 } from "lucide-react";
 import Link from "next/link";
 import { PurposeSpanish } from "../../constants/purpose";
 import { useFarmByIdQuery } from "../../hooks/use-farm-query";
 import { redirect } from "next/navigation";
 import LoadingDashboard from "../components/loading-dashboard";
+import { CiGrid42 } from "react-icons/ci";
+import { GiCow } from "react-icons/gi";
+import { FaHeartbeat } from "react-icons/fa";
+import { MdPointOfSale } from "react-icons/md";
 
 interface DashboardFarmViewProps {
   id: number;
@@ -32,7 +35,7 @@ export default function DashboardFarmView({ id }: DashboardFarmViewProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-lg font-medium">Lotes</CardTitle>
-            <Grid2X2 className="h-4 w-4 text-muted-foreground" />
+            <CiGrid42 className="h-10 w-10 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+10</div>
@@ -44,6 +47,7 @@ export default function DashboardFarmView({ id }: DashboardFarmViewProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-lg font-medium">Animales</CardTitle>
+            <GiCow className="h-10 w-10 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+230</div>
@@ -53,6 +57,7 @@ export default function DashboardFarmView({ id }: DashboardFarmViewProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-lg font-medium">Gestaciones</CardTitle>
+            <FaHeartbeat className="h-10 w-10 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+34</div>
@@ -65,6 +70,7 @@ export default function DashboardFarmView({ id }: DashboardFarmViewProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-lg font-medium">Ventas</CardTitle>
+            <MdPointOfSale className="h-10 w-10 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+573</div>

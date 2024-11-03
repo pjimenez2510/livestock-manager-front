@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Ellipsis } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -21,6 +19,7 @@ import { getMenuList } from "@/lib/menu-list";
 import { useSession } from "next-auth/react";
 import { UserRole } from "@/features/users/interfaces/user.interface";
 import { useFarmStore } from "@/features/farms/context/use-farm-store";
+import { FaEllipsis } from "react-icons/fa6";
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -33,7 +32,7 @@ export function Menu({ isOpen }: MenuProps) {
   const menuList = getMenuList(
     pathname,
     session.data?.user.role as UserRole,
-    farm?.id
+    farm
   );
 
   return (
@@ -51,7 +50,7 @@ export function Menu({ isOpen }: MenuProps) {
                   <Tooltip delayDuration={100}>
                     <TooltipTrigger className="w-full">
                       <div className="flex w-full items-center justify-center">
-                        <Ellipsis className="h-5 w-5" />
+                        <FaEllipsis className="h-5 w-5" />
                       </div>
                     </TooltipTrigger>
                     <TooltipContent side="right">
@@ -77,9 +76,7 @@ export function Menu({ isOpen }: MenuProps) {
                               <Link href={href}>
                                 <span
                                   className={cn(isOpen === false ? "" : "mr-4")}
-                                >
-                                  <Icon size={18} />
-                                </span>
+                                ></span>
                                 <p
                                   className={cn(
                                     "max-w-[200px] truncate",

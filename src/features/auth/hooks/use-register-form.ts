@@ -12,12 +12,14 @@ import { routesRedirectAuth } from "@/lib/routes-redirect";
 const schema = z.object({
   firstName: z.string().min(1, "El nombre es requerido"),
   lastName: z.string().min(1, "El apellido es requerido"),
-  username: z.string().min(1, "El nombre de usuario es requerido"),
+  username: z
+    .string()
+    .min(5, "El nombre de usuario debe tener mínimo 6 carácteres"),
   email: z
     .string()
     .min(1, "El email es requerido")
     .email("El email no es válido"),
-  password: z.string().min(1, "La contraseña es requerida"),
+  password: z.string().min(6, "La contraseña debe tener mínimo 6 carácteres"),
   phone: z.string().length(10, "El teléfono debe tener 10 dígitos"),
 });
 
@@ -50,10 +52,6 @@ export function useRegister() {
       .then(async (res) => {
         const isLogged = await login(res);
 
-        if (!isLogged.ok) {
-          toast.error(isLogged.message);
-          return;
-        }
         toast.success(isLogged.message);
         const redirectPath = routesRedirectAuth[UserRole.User];
         window.location.replace(redirectPath);

@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { useSidebarToggle } from "@/core/hooks/use-sidebar-toggle";
 import { useStore } from "@/core/hooks/use-store";
-import { Vegan } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -11,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Menu } from "./menu";
 import { SidebarToggle } from "./sidebar-toggle";
 import FarmList from "@/features/farms/presentation/components/farm-list";
+import { PiFarm } from "react-icons/pi";
 
 export function Sidebar() {
   const sidebar = useStore(useSidebarToggle, (state) => state);
@@ -35,7 +35,7 @@ export function Sidebar() {
           asChild
         >
           <Link href="/" className="flex items-center gap-2">
-            <Vegan className="mr-1 h-6 w-6" />
+            <PiFarm className="mr-1 h-6 w-6" />
             <h1
               className={cn(
                 "whitespace-nowrap text-lg font-bold transition-[transform,opacity,display] duration-300 ease-in-out",

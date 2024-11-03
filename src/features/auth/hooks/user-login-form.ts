@@ -33,18 +33,11 @@ export function useLogin() {
       .then(async (res) => {
         const isLogged = await login(res);
 
-        if (!isLogged.ok) {
-          toast.error(isLogged.message);
-          return;
-        }
-
         toast.success(isLogged.message);
         const redirectPath = routesRedirectAuth[res.user.role];
         window.location.replace(redirectPath);
       })
-      .catch((err) => {
-        toast.error(err.message);
-      });
+      .catch(() => {});
   };
 
   return { onSubmit, methods, isSubmiting: methods.formState.isSubmitting };

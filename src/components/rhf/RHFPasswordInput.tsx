@@ -36,9 +36,7 @@ const RHFPasswordInput: React.FC<FormInputProps> = ({
           <PasswordInput {...field} id={name} placeholder={placeholder} />
         )}
       />
-      <p className="max-w-52 text-sm text-red-500">
-        &nbsp;{getErrorMessage(name)}
-      </p>
+      <p className="text-sm text-red-500">&nbsp;{getErrorMessage(name)}</p>
     </div>
   );
 };

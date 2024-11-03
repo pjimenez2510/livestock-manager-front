@@ -31,6 +31,18 @@ const routes: RoutesPrivate[] = [
     path: "/management/farm/:id/lot/edit/:id",
     roles: [UserRole.Admin, UserRole.User],
   },
+  {
+    path: "/management/farm/:id/animal/list",
+    roles: [UserRole.Admin, UserRole.User],
+  },
+  {
+    path: "/management/farm/:id/animal/create",
+    roles: [UserRole.Admin, UserRole.User],
+  },
+  {
+    path: "/management/farm/:id/animal/edit/:id",
+    roles: [UserRole.Admin, UserRole.User],
+  },
 ];
 
 interface RoleAllowed {

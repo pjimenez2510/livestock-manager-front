@@ -12,7 +12,6 @@ import queryClient from "@/core/infrastructure/react-query/query-client";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
-  preload: false,
 });
 
 export const metadata: Metadata = {

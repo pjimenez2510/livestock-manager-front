@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut } from "lucide-react";
+import { LuLogOut } from "react-icons/lu";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -75,7 +75,7 @@ export function UserNav() {
             variant={"ghost"}
             onClick={onLogout}
           >
-            <LogOut className="mr-3 h-4 w-4 text-muted-foreground" />
+            <LuLogOut className="mr-3 h-4 w-4 text-muted-foreground" />
             Cerrar sesión
           </Button>
         </DropdownMenuItem>

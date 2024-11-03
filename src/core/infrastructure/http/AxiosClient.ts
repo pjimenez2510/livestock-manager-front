@@ -1,4 +1,5 @@
 import { auth } from "@/auth.config";
+import { getErrors } from "@/lib/get-errors";
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { getSession } from "next-auth/react";
 import toast from "react-hot-toast";
@@ -15,7 +16,7 @@ class AxiosClient {
   private static axiosClient: AxiosClient;
 
   private static readonly baseUrl: string =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3002";
 
   private constructor() {
     this.axiosInstance = axios.create({
@@ -54,8 +55,12 @@ class AxiosClient {
       },
       (error) => {
         if (typeof window !== "undefined") {
-          console.log("hola");
-          toast.error(error?.response?.data?.message);
+          const errors = getErrors([
+            error?.response?.data?.message,
+            error?.response?.data?.error,
+          ]);
+
+          toast.error(errors || error.message);
         } else {
           console.error(error?.response?.data);
         }

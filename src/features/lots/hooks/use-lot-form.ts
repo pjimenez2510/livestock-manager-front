@@ -17,7 +17,8 @@ const schema = z.object({
   }),
   dimension: z.coerce
     .number({ message: "La dimensión debe ser un número" })
-    .min(1, "La dimension debe ser igula o mayor a 1"),
+    .min(0.1, "La dimension debe ser igual o mayor a 0.1"),
+  farmId: z.string().min(1, "La finca es requerida"),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -35,6 +36,7 @@ export const useLotForm = ({ lot }: LotFormProps) => {
       name: lot?.name || "",
       dimension: lot?.dimension || undefined,
       purpose: lot?.purpose || undefined,
+      farmId: String(farm?.id) || undefined,
     },
   });
 
@@ -42,7 +44,7 @@ export const useLotForm = ({ lot }: LotFormProps) => {
     if (!farm) return;
     if (lot) {
       await LotService.getInstance()
-        .update(lot.id, data)
+        .update(lot.id, { ...data, farmId: Number(data.farmId) })
         .then(() => {
           queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.LOTS] });
           router.push(`/management/farm/${farm?.id}/lot/list`);
@@ -53,7 +55,7 @@ export const useLotForm = ({ lot }: LotFormProps) => {
       return;
     }
     await LotService.getInstance()
-      .create({ ...data, farmId: farm?.id })
+      .create({ ...data, farmId: Number(data.farmId) })
       .then(() => {
         queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.LOTS] });
         router.push(`/management/farm/${farm?.id}/lot/list`);

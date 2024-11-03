@@ -1,4 +1,7 @@
 export const QUERY_KEYS = {
   FARMS: "FARMS",
   LOTS: "LOTS",
+  VACCINES: "VACCINES",
+  BREEDS: "BREEDS",
+  ANIMALS: "ANIMALS",
 };

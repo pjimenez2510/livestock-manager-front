@@ -13,6 +13,7 @@ export default function ListLotView() {
   const { farm } = useFarmStore();
   const { data: lots } = useLotsQuery({ farmId: farm?.id });
   const router = useRouter();
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">

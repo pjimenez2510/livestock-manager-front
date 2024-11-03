@@ -45,8 +45,8 @@ const RHFInput: React.FC<FormInputProps> = ({
             id={name}
             type={type}
             placeholder={placeholder}
-            className="mt-1"
             disabled={disabled}
+            value={field.value || ""}
           />
         )}
       />

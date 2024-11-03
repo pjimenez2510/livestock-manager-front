@@ -9,12 +9,12 @@ interface Sex {
 export const animalSexSpanish: Record<AnimalSex, Sex> = {
   MALE: {
     label: "Macho",
-    class: "bg-blue-500 hover:bg-blue-600",
+    class: "bg-blue-200 hover:bg-blue-300 text-blue-900",
     description: "El animal es un macho",
   },
   FEMALE: {
     label: "Hembra",
-    class: "bg-pink-500 hover:bg-pink-600",
+    class: "bg-pink-200 hover:bg-pink-300 text-pink-900",
     description: "El animal es una hembra",
   },
 };

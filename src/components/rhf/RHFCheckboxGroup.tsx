@@ -28,7 +28,7 @@ const RHFCheckboxGroup: React.FC<RHFCheckboxGroupProps> = ({
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full space-y-1">
       <Label htmlFor={name} className="ml-1">
         {label}
       </Label>

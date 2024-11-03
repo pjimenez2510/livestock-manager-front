@@ -7,7 +7,7 @@ import { FilterAnimalsParams } from "../interfaces/animal-filter.interface";
 
 export const useAnimalsQuery = (filter?: FilterAnimalsParams) => {
   const query = useQuery({
-    queryKey: [QUERY_KEYS.ANIMALS, ...getValuesByObjec(filter)],
+    queryKey: [QUERY_KEYS.ANIMALS, JSON.stringify(filter)],
     queryFn: async () => await AnimalService.getInstance().getAll(filter),
   });
 
@@ -24,7 +24,7 @@ export const useAnimalByIdQuery = (id: number) => {
   return query;
 };
 
-const getValuesByObjec = (filter?: FilterAnimalsParams) => {
+export const getValuesByObjec = (filter?: FilterAnimalsParams) => {
   console.log(JSON.stringify(filter));
   if (!filter) return [];
   return Object.values(filter).values().toArray();

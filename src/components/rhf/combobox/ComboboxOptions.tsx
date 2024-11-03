@@ -64,7 +64,7 @@ const ComboboxOptions = ({
       <PopoverContent className="w-full p-0" align="start">
         <Command shouldFilter={false}>
           <CommandInput
-            placeholder="Search..."
+            placeholder="Buscar..."
             value={searchQuery}
             onValueChange={setSearchQuery}
             className="h-9"
@@ -77,7 +77,9 @@ const ComboboxOptions = ({
                   key={option.value}
                   value={option.value}
                   onSelect={() => {
-                    field.onChange(option.value);
+                    field.onChange(
+                      option.value === field.value ? "" : option.value
+                    );
                     setOpen(false);
                     setSearchQuery("");
                   }}

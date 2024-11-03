@@ -36,7 +36,7 @@ const RHFCombobox = ({
   };
 
   return (
-    <div className={cn("w-full space-y-2", className)}>
+    <div className={cn("w-full space-y-1", className)}>
       {label && <Label htmlFor={name}>{label}</Label>}
       <Controller
         name={name}

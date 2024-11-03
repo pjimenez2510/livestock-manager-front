@@ -2,6 +2,7 @@ import { FilterLotsParams } from "@/features/lots/interfaces/filter-lot.interfac
 import { AnimalSex, Purpose, StatusAnimal } from "./animal.interface";
 
 export interface FilterAnimalsParams {
+  filter?: string;
   name?: string;
   number?: string;
   urlImg?: string;

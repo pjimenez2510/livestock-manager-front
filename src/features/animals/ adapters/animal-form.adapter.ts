@@ -6,7 +6,7 @@ import {
   StatusAnimal,
 } from "../interfaces/animal.interface";
 
-export class AnimalDataTransformer {
+export class AnimalFormAdapter {
   static mapAnimalToFormFields(animal?: AnimalCreate): FormFieldsAnimal {
     if (!animal) {
       return {
@@ -48,10 +48,12 @@ export class AnimalDataTransformer {
   static mapFormDataToApi(formData: FormFieldsAnimal): AnimalCreate {
     return {
       ...formData,
+      dateOfBirth: formData.dateOfBirth ? formData.dateOfBirth : null,
+      dateOfPurchase: formData.dateOfPurchase ? formData.dateOfPurchase : null,
       lotId: Number(formData.lotId),
-      breedId: formData.breedId ? Number(formData.breedId) : undefined,
-      motherId: formData.motherId ? Number(formData.motherId) : undefined,
-      fatherId: formData.fatherId ? Number(formData.fatherId) : undefined,
+      breedId: formData.breedId ? Number(formData.breedId) : null,
+      motherId: formData.motherId ? Number(formData.motherId) : null,
+      fatherId: formData.fatherId ? Number(formData.fatherId) : null,
     };
   }
 }

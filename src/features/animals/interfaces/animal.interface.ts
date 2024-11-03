@@ -26,10 +26,22 @@ export interface AnimalBase {
   purpose: Purpose;
   status: StatusAnimal;
   sex: AnimalSex;
-  motherId?: number;
-  fatherId?: number;
+  motherId?: number | null;
+  fatherId?: number | null;
   lotId: number;
-  breedId?: number;
+  breedId?: number | null;
+  lot?: {
+    name: string;
+    id: number;
+  };
+  father?: {
+    name: string;
+    id: number;
+  };
+  mother?: {
+    name: string;
+    id: number;
+  };
 }
 
 export interface Animal extends AnimalBase {

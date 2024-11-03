@@ -27,7 +27,7 @@ const RHFPasswordInput: React.FC<FormInputProps> = ({
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full space-y-1">
       <Label htmlFor={name}>{label}</Label>
       <Controller
         name={name}

@@ -15,7 +15,7 @@ import {
 import { AnimalService } from "../services/animal.service";
 import { useFarmStore } from "@/features/farms/context/use-farm-store";
 import toast from "react-hot-toast";
-import { AnimalDataTransformer } from "../ adapters/animal-form.adapter";
+import { AnimalFormAdapter } from "../ adapters/animal-form.adapter";
 
 const schema = z.object({
   name: z.string().min(1, { message: "El nombre es requerido" }),
@@ -44,11 +44,11 @@ export const useAnimalForm = ({ animal }: FormProps) => {
 
   const methods = useForm<FormFieldsAnimal>({
     resolver: zodResolver(schema),
-    defaultValues: AnimalDataTransformer.mapAnimalToFormFields(animal),
+    defaultValues: AnimalFormAdapter.mapAnimalToFormFields(animal),
   });
 
   const handleCreate = async (data: FormFieldsAnimal) => {
-    const apiData = AnimalDataTransformer.mapFormDataToApi(data);
+    const apiData = AnimalFormAdapter.mapFormDataToApi(data);
     await AnimalService.getInstance().create(apiData);
     queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ANIMALS] });
     toast.success("Animal creado");
@@ -57,7 +57,7 @@ export const useAnimalForm = ({ animal }: FormProps) => {
 
   const handleUpdate = async (data: FormFieldsAnimal) => {
     if (!animal) return;
-    const apiData = AnimalDataTransformer.mapFormDataToApi(data);
+    const apiData = AnimalFormAdapter.mapFormDataToApi(data);
     await AnimalService.getInstance().update(animal.id, apiData);
     queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ANIMALS] });
     toast.success("Animal actualizado");
@@ -78,7 +78,6 @@ export const useAnimalForm = ({ animal }: FormProps) => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Ocurrió un error al procesar la solicitud");
     }
   };
 

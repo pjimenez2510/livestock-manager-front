@@ -5,12 +5,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { FormProvider } from "react-hook-form";
 import { useAnimalForm } from "../../hooks/use-animal-form";
-import {
-  Animal,
-  AnimalSex,
-  Purpose,
-  StatusAnimal,
-} from "../../interfaces/animal.interface";
+import { Animal, AnimalSex } from "../../interfaces/animal.interface";
 import RHFSelect from "@/components/rhf/RHFSelect";
 import RHFDatePicker from "@/components/rhf/date-picker/RHFDatePicker";
 import { useLotsQuery } from "@/features/lots/hooks/use-lot-query";
@@ -18,29 +13,14 @@ import { useFarmStore } from "@/features/farms/context/use-farm-store";
 import RHFCombobox from "@/components/rhf/combobox/RHFCombobox";
 import { useBreedsQuery } from "@/features/breeds/hooks/use-breed-query";
 import { useAnimalsQuery } from "../../hooks/use-animal-query";
+import { purposeOptions } from "../../constants/purpose-options";
+import { sexOptions } from "../../constants/sex-options";
+import { statusOptions } from "../../constants/status-options";
+import { useRouter } from "next/navigation";
 
 interface FormProps {
   animal?: Animal;
 }
-
-// Memoized options arrays to prevent recreating on every render
-const purposeOptions = [
-  { value: Purpose.Milk, label: "Leche" },
-  { value: Purpose.Meat, label: "Carne" },
-  { value: Purpose.DualPurpose, label: "Doble Propósito" },
-];
-
-const statusOptions = [
-  { value: StatusAnimal.ALIVE, label: "Vivo" },
-  { value: StatusAnimal.SOLD, label: "Vendido" },
-  { value: StatusAnimal.LOST, label: "Perdido" },
-  { value: StatusAnimal.DECEASED, label: "Muerto" },
-];
-
-const sexOptions = [
-  { value: AnimalSex.MALE, label: "Macho" },
-  { value: AnimalSex.FEMALE, label: "Hembra" },
-];
 
 interface FormFieldsProps {
   lotsOptions: { value: string; label: string }[];
@@ -50,7 +30,6 @@ interface FormFieldsProps {
   isSubmiting: boolean;
 }
 
-// Separate component for form fields to prevent unnecessary rerenders
 const FormFields = memo(
   ({
     lotsOptions,
@@ -60,12 +39,12 @@ const FormFields = memo(
     isSubmiting,
   }: FormFieldsProps) => (
     <>
-      <RHFInput name="name" label="Nombre" />
       <RHFInput name="number" label="Número" />
+      <RHFInput name="name" label="Nombre" />
+      <RHFInput name="description" label="Descripción" />
       <RHFSelect name="sex" label="Sexo" options={sexOptions} />
       <RHFDatePicker name="dateOfBirth" label="Fecha de nacimiento" />
       <RHFDatePicker name="dateOfPurchase" label="Fecha de compra" />
-      <RHFInput name="description" label="Descripción" />
       <RHFSelect name="purpose" label="Propósito" options={purposeOptions} />
       <RHFSelect name="status" label="Estado" options={statusOptions} />
       <RHFCombobox
@@ -102,10 +81,10 @@ const FormFields = memo(
 FormFields.displayName = "FormFields";
 
 export const AnimalForm = memo(({ animal }: FormProps) => {
+  const router = useRouter();
   const { methods, onSubmit, isSubmiting } = useAnimalForm({ animal });
   const { farm } = useFarmStore();
 
-  // Queries with proper dependencies
   const { data: lots, isLoading: isLoadingLots } = useLotsQuery({
     farmId: farm?.id,
   });
@@ -117,7 +96,6 @@ export const AnimalForm = memo(({ animal }: FormProps) => {
     sex: AnimalSex.MALE,
   });
 
-  // Memoize options transformations
   const lotsOptions = useMemo(
     () =>
       lots?.map((lot) => ({
@@ -155,7 +133,29 @@ export const AnimalForm = memo(({ animal }: FormProps) => {
   );
 
   if (isLoadingLots || isLoadingBreeds || isLoadingMom || isLoadingFather) {
-    return <LoadingSpinner />;
+    return (
+      <div className="flex flex-row justify-center gap-4">
+        <LoadingSpinner /> Cargando datos...
+      </div>
+    );
+  }
+
+  if (!lots || lots.length === 0) {
+    return (
+      <div className="flex flex-col gap-4">
+        <p className="text-xl">Antes de crear un animal debes crear un lote</p>
+        <div className="flex justify-center w-full">
+          <Button
+            onClick={() => {
+              router.push(`/management/farm/${farm?.id}/lot/create`);
+            }}
+            variant="secondary"
+          >
+            Crear lote
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (

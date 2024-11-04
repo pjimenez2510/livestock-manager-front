@@ -38,22 +38,29 @@ export class AnimalFormAdapter {
       purpose: animal.purpose,
       status: animal.status,
       sex: animal.sex,
-      motherId: animal.motherId?.toString() || "",
-      fatherId: animal.fatherId?.toString() || "",
+      motherId: animal?.motherId ? animal.motherId.toString() : "",
+      fatherId: animal?.fatherId ? animal.fatherId.toString() : "",
       lotId: animal.lotId.toString(),
-      breedId: animal.breedId?.toString() || "",
+      breedId: animal.breedId ? animal.breedId.toString() : "",
+      image: null,
     };
   }
 
-  static mapFormDataToApi(formData: FormFieldsAnimal): AnimalCreate {
-    return {
-      ...formData,
-      dateOfBirth: formData.dateOfBirth ? formData.dateOfBirth : null,
-      dateOfPurchase: formData.dateOfPurchase ? formData.dateOfPurchase : null,
-      lotId: Number(formData.lotId),
-      breedId: formData.breedId ? Number(formData.breedId) : null,
-      motherId: formData.motherId ? Number(formData.motherId) : null,
-      fatherId: formData.fatherId ? Number(formData.fatherId) : null,
-    };
+  static mapFormDataToApi(formData: FormFieldsAnimal): FormData {
+    const formDataToSend = new FormData();
+
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value !== undefined && value !== "") {
+        if (key === "image" && value instanceof File) {
+          formDataToSend.append("image", value);
+        } else if (value instanceof Date) {
+          formDataToSend.append(key, value.toISOString());
+        } else {
+          formDataToSend.append(key, String(value));
+        }
+      }
+    });
+
+    return formDataToSend;
   }
 }

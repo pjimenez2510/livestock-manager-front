@@ -20,6 +20,7 @@ import { AnimalFormAdapter } from "../ adapters/animal-form.adapter";
 const schema = z.object({
   name: z.string().min(1, { message: "El nombre es requerido" }),
   number: z.string().min(1, { message: "El número es requerido" }),
+  image: z.instanceof(File).nullable().optional(),
   description: z.string().optional(),
   dateOfBirth: z.date().optional(),
   dateOfPurchase: z.date().optional(),
@@ -49,7 +50,7 @@ export const useAnimalForm = ({ animal }: FormProps) => {
 
   const handleCreate = async (data: FormFieldsAnimal) => {
     const apiData = AnimalFormAdapter.mapFormDataToApi(data);
-    await AnimalService.getInstance().create(apiData);
+    await AnimalService.getInstance().createAnimal(apiData);
     queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ANIMALS] });
     toast.success("Animal creado");
     router.push(`/management/farm/${farm?.id}/animal/list`);
@@ -58,7 +59,7 @@ export const useAnimalForm = ({ animal }: FormProps) => {
   const handleUpdate = async (data: FormFieldsAnimal) => {
     if (!animal) return;
     const apiData = AnimalFormAdapter.mapFormDataToApi(data);
-    await AnimalService.getInstance().update(animal.id, apiData);
+    await AnimalService.getInstance().updateAnimal(animal.id, apiData);
     queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ANIMALS] });
     toast.success("Animal actualizado");
     router.push(`/management/farm/${farm?.id}/animal/list`);

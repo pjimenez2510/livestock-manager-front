@@ -4,7 +4,7 @@ import {
   AnimalSex,
   Purpose,
   StatusAnimal,
-} from "../../interfaces/animal.interface";
+} from "../../../interfaces/animal.interface";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,10 +19,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { animalSexSpanish } from "../../constants/animal-sex-spanish";
-import { animalPurposeSpanish } from "../../constants/animal-purpose-spanish";
-import { animalStatusSpanish } from "../../constants/animal-status-spanish";
+import { animalSexSpanish } from "../../../constants/animal-sex-spanish";
+import { animalPurposeSpanish } from "../../../constants/animal-purpose-spanish";
+import { animalStatusSpanish } from "../../../constants/animal-status-spanish";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export const AnimalColumns = (farmId?: number): ColumnDef<Animal>[] => {
   const router = useRouter();
@@ -46,6 +47,24 @@ export const AnimalColumns = (farmId?: number): ColumnDef<Animal>[] => {
       ),
       enableSorting: false,
       enableHiding: false,
+    },
+    {
+      accessorKey: "urlImg",
+      header: "Imagen",
+      cell: ({ row }) => {
+        const urlImg = row.getValue("urlImg") as string;
+        return (
+          <div className="flex items-center justify-center w-20 h-20">
+            <Image
+              src={urlImg || "/images/animal-plaholder.png"}
+              alt="imagen"
+              width={100}
+              height={100}
+              loading="lazy"
+            />
+          </div>
+        );
+      },
     },
     {
       accessorKey: "number",

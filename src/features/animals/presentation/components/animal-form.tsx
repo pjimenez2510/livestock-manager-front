@@ -17,6 +17,7 @@ import { purposeOptions } from "../../constants/purpose-options";
 import { sexOptions } from "../../constants/sex-options";
 import { statusOptions } from "../../constants/status-options";
 import { useRouter } from "next/navigation";
+import ImageUpload from "./image-upload";
 
 interface FormProps {
   animal?: Animal;
@@ -28,6 +29,7 @@ interface FormFieldsProps {
   animalsMonOptions: { value: string; label: string }[];
   animalsFatherOptions: { value: string; label: string }[];
   isSubmiting: boolean;
+  urlImg?: string;
 }
 
 const FormFields = memo(
@@ -37,8 +39,10 @@ const FormFields = memo(
     animalsMonOptions,
     animalsFatherOptions,
     isSubmiting,
+    urlImg,
   }: FormFieldsProps) => (
     <>
+      <ImageUpload urlImg={urlImg} />
       <RHFInput name="number" label="Número" />
       <RHFInput name="name" label="Nombre" />
       <RHFInput name="description" label="Descripción" />
@@ -170,6 +174,7 @@ export const AnimalForm = memo(({ animal }: FormProps) => {
           animalsMonOptions={animalsMonOptions}
           animalsFatherOptions={animalsFatherOptions}
           isSubmiting={isSubmiting}
+          urlImg={animal?.urlImg}
         />
       </form>
     </FormProvider>

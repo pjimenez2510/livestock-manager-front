@@ -19,7 +19,7 @@ export enum AnimalSex {
 export interface AnimalBase {
   name: string;
   number: string;
-  urlImage?: string;
+  image?: File | null;
   description?: string;
   dateOfBirth?: Date | null;
   dateOfPurchase?: Date | null;
@@ -30,6 +30,12 @@ export interface AnimalBase {
   fatherId?: number | null;
   lotId: number;
   breedId?: number | null;
+}
+
+export interface Animal extends AnimalBase {
+  id: number;
+  urlImg?: string;
+  createAt: string;
   lot?: {
     name: string;
     id: number;
@@ -44,11 +50,11 @@ export interface AnimalBase {
   };
 }
 
-export interface Animal extends AnimalBase {
-  id: number;
-  createAt: string;
-}
-
 export type AnimalCreate = AnimalBase;
 
 export type AnimalUpdate = Partial<AnimalBase>;
+
+export interface AnimalsUpdate {
+  animalsId: number[];
+  data: AnimalUpdate;
+}

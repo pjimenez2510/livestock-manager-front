@@ -24,6 +24,47 @@ import { ColumnVisibilityDropdown } from "./column-visibility-dropdown";
 import { DataTable } from "./data-table";
 import { TablePagination } from "./table-pagination";
 import { AnimalService } from "@/features/animals/services/animal.service";
+import queryClient from "@/core/infrastructure/react-query/query-client";
+import { QUERY_KEYS } from "@/shared/api/query-key";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
+interface UpdateDialogProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  onConfirm: () => Promise<void>;
+  title: string;
+  description: string;
+}
+
+const UpdateDialog = ({
+  isOpen,
+  onOpenChange,
+  onConfirm,
+  title,
+  description,
+}: UpdateDialogProps) => (
+  <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>{title}</AlertDialogTitle>
+        <AlertDialogDescription>{description}</AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel>Cancel</AlertDialogCancel>
+        <AlertDialogAction onClick={onConfirm}>Continue</AlertDialogAction>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
+);
 
 interface AnimalTableProps {
   animals: Animal[];
@@ -42,6 +83,15 @@ const AnimalTable = ({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const [updateDialog, setUpdateDialog] = useState<{
+    isOpen: boolean;
+    type: "status" | "lot" | null;
+    data: { status?: StatusAnimal; lotId?: number };
+  }>({
+    isOpen: false,
+    type: null,
+    data: {},
+  });
 
   const columns: ColumnDef<Animal>[] = AnimalColumns(idFarm);
 
@@ -64,21 +114,68 @@ const AnimalTable = ({
     },
   });
 
-  const handleBulkStatusChange = (newStatus: StatusAnimal) => {
+  const getSelectedIds = () => {
     const selectedRows = table.getSelectedRowModel().rows;
-    if (newStatus) {
-      const ids = selectedRows.map((row) => +row.original.id);
-      if (!ids.length) return;
-      AnimalService.getInstance().updateAnimals({
-        ids,
-        status: newStatus as StatusAnimal,
+    return selectedRows.map((row) => +row.original.id);
+  };
+
+  const handleUpdateConfirm = async () => {
+    const ids = getSelectedIds();
+    if (!ids.length) return;
+
+    try {
+      await AnimalService.getInstance().updateAnimals({
+        animalsId: ids,
+        data: updateDialog.data,
       });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ANIMALS] });
+      setRowSelection({});
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setUpdateDialog((prev) => ({ ...prev, isOpen: false }));
     }
   };
 
-  const handleBulkDelete = () => {
-    const selectedRows = table.getSelectedRowModel().rows;
-    console.log(selectedRows);
+  const handleBulkStatusChange = (newStatus: StatusAnimal) => {
+    setUpdateDialog({
+      isOpen: true,
+      type: "status",
+      data: { status: newStatus },
+    });
+  };
+
+  const handleBulkLotChange = (newLotId: number) => {
+    setUpdateDialog({
+      isOpen: true,
+      type: "lot",
+      data: { lotId: newLotId },
+    });
+  };
+
+  const getDialogProps = () => {
+    const baseProps = {
+      isOpen: updateDialog.isOpen,
+      onOpenChange: (open: boolean) =>
+        setUpdateDialog((prev) => ({ ...prev, isOpen: open })),
+      onConfirm: handleUpdateConfirm,
+    };
+
+    if (updateDialog.type === "status") {
+      return {
+        ...baseProps,
+        title: "Actualizar Estado",
+        description:
+          "Estás seguro que deseas cambiar el estado de los animales seleccionados?",
+      };
+    }
+
+    return {
+      ...baseProps,
+      title: "Actualizar Lote",
+      description:
+        "Estás seguro que deseas cambiar el lote de los animales seleccionados?",
+    };
   };
 
   return (
@@ -89,9 +186,10 @@ const AnimalTable = ({
         <TableFilters methods={methods} lots={lots} />
 
         <BulkActions
+          lots={lots}
           table={table}
           onStatusChange={handleBulkStatusChange}
-          onDelete={handleBulkDelete}
+          onLotChange={handleBulkLotChange}
         />
 
         <ColumnVisibilityDropdown table={table} />
@@ -100,6 +198,8 @@ const AnimalTable = ({
       <DataTable table={table} columns={columns} />
 
       <TablePagination table={table} />
+
+      <UpdateDialog {...getDialogProps()} />
     </div>
   );
 };

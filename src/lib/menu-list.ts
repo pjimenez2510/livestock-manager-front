@@ -133,6 +133,14 @@ const getAllMenuList = (pathname: string, farm?: Farm) => {
             },
           ],
         },
+        {
+          href: "/management/agenda",
+          label: "Agenda",
+          active: pathname.startsWith("/management/agenda"),
+          roles: [UserRole.Admin, UserRole.User],
+          icon: TbPaw,
+          submenus: [],
+        },
       ],
     },
   ];

@@ -40,9 +40,8 @@ export class AnimalService extends BaseHttpService<
 
   async updateAnimals(animalUpdatePayload: AnimalsUpdate) {
     const { data } = await this.http.patch<number>(
-      `/animals`,
-      animalUpdatePayload,
-      {}
+      `/animals/bulk/update`,
+      animalUpdatePayload
     );
     return data.data;
   }

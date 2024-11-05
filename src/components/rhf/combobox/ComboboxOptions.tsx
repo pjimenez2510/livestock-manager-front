@@ -15,7 +15,6 @@ import {
 import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
-import { ControllerRenderProps, FieldValues } from "react-hook-form";
 
 interface ComboboxOption {
   value: string;
@@ -26,14 +25,16 @@ interface ComboboxOptionsProps {
   label?: string;
   options: ComboboxOption[];
   placeholder?: string;
-  field: ControllerRenderProps<FieldValues, string>;
+  value: string;
+  onChange: (value: string) => void;
 }
 
 const ComboboxOptions = ({
   options,
   placeholder,
-  field,
   label,
+  value,
+  onChange,
 }: ComboboxOptionsProps) => {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,8 +56,8 @@ const ComboboxOptions = ({
           className="w-full justify-between"
           aria-label={label}
         >
-          {field.value
-            ? options.find((option) => option.value === field.value)?.label
+          {value
+            ? options.find((option) => option.value === value)?.label
             : placeholder}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -77,9 +78,7 @@ const ComboboxOptions = ({
                   key={option.value}
                   value={option.value}
                   onSelect={() => {
-                    field.onChange(
-                      option.value === field.value ? "" : option.value
-                    );
+                    onChange(option.value === value ? "" : option.value);
                     setOpen(false);
                     setSearchQuery("");
                   }}
@@ -88,7 +87,7 @@ const ComboboxOptions = ({
                   <CheckIcon
                     className={cn(
                       "ml-auto h-4 w-4",
-                      field.value === option.value ? "opacity-100" : "opacity-0"
+                      value === option.value ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

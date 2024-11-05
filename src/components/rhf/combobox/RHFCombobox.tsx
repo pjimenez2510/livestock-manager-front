@@ -45,7 +45,8 @@ const RHFCombobox = ({
           <ComboboxOptions
             options={options}
             placeholder={placeholder}
-            field={field}
+            value={field.value}
+            onChange={field.onChange}
             label={label}
           />
         )}

@@ -43,6 +43,18 @@ const routes: RoutesPrivate[] = [
     path: "/management/farm/:id/animal/edit/:id",
     roles: [UserRole.Admin, UserRole.User],
   },
+  {
+    path: "/management/vaccine/list",
+    roles: [UserRole.Admin, UserRole.User],
+  },
+  {
+    path: "/management/vaccine/create",
+    roles: [UserRole.Admin, UserRole.User],
+  },
+  {
+    path: "/management/vaccine/edit/:id",
+    roles: [UserRole.Admin, UserRole.User],
+  },
 ];
 
 interface RoleAllowed {

@@ -23,9 +23,3 @@ export const useAnimalByIdQuery = (id: number) => {
 
   return query;
 };
-
-export const getValuesByObjec = (filter?: FilterAnimalsParams) => {
-  console.log(JSON.stringify(filter));
-  if (!filter) return [];
-  return Object.values(filter).values().toArray();
-};

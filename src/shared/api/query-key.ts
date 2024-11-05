@@ -4,4 +4,5 @@ export const QUERY_KEYS = {
   VACCINES: "VACCINES",
   BREEDS: "BREEDS",
   ANIMALS: "ANIMALS",
+  EVENTS: "EVENTS",
 };

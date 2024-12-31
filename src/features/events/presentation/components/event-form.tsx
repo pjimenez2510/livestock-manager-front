@@ -9,10 +9,14 @@ import RHFDateTimePicker from "@/components/rhf/data-time-picker";
 
 interface FormProps {
   event?: Event;
+  handleDialogClose: () => void;
 }
 
-export const EventForm = ({ event }: FormProps) => {
-  const { methods, onSubmit, isSubmiting } = useEventForm({ event });
+export const EventForm = ({ event, handleDialogClose }: FormProps) => {
+  const { methods, onSubmit, isSubmiting } = useEventForm({
+    event,
+    handleDialogClose,
+  });
 
   return (
     <FormProvider {...methods}>
@@ -28,7 +32,7 @@ export const EventForm = ({ event }: FormProps) => {
 
         <RHFDateTimePicker name="endDate" label="Fecha de fin" />
 
-        <Button disabled={isSubmiting} type="submit">
+        <Button disabled={isSubmiting} className="mt-1" type="submit">
           {isSubmiting ? <LoadingSpinner /> : "Guardar"}
         </Button>
       </form>

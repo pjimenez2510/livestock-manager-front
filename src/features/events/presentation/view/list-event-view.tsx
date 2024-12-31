@@ -10,7 +10,7 @@ import {
 } from "react-big-calendar";
 import { format, getDay, parse, startOfWeek } from "date-fns";
 import { es } from "date-fns/locale";
-import "react-big-calendar/lib/css/react-big-calendar.css";
+import "../../styles/react-calendar.css";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -206,7 +206,10 @@ const CalendarioEventos = () => {
               {selectedEvent?.id ? "Editar evento" : "Crear nuevo evento"}
             </DialogTitle>
           </DialogHeader>
-          <EventForm event={selectedEvent} />
+          <EventForm
+            event={selectedEvent}
+            handleDialogClose={handleDialogClose}
+          />
         </DialogContent>
       </Dialog>
     </>

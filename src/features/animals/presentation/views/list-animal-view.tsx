@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-
 import { useAnimalsQuery } from "../../hooks/use-animal-query";
 import { useFarmStore } from "@/features/farms/context/use-farm-store";
 
@@ -17,10 +15,6 @@ export default function ListAnimalView() {
   });
   const { data: animals } = useAnimalsQuery(values);
   const { data: lots } = useLotsQuery({ farmId: farm?.id });
-
-  React.useEffect(() => {
-    console.log(values);
-  }, [values]);
 
   return (
     <AnimalTable

@@ -4,7 +4,6 @@ import CalendarioEventos from "@/features/events/presentation/view/list-event-vi
 export default function Page() {
   return (
     <ContentLayout title="Agenda">
-      agenda{/*  <ListEventView /> */}
       <CalendarioEventos />
     </ContentLayout>
   );

@@ -20,6 +20,7 @@ import { useSession } from "next-auth/react";
 import { UserRole } from "@/features/users/interfaces/user.interface";
 import { useFarmStore } from "@/features/farms/context/use-farm-store";
 import { FaEllipsis } from "react-icons/fa6";
+import { useMemo } from "react";
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -29,10 +30,10 @@ export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
   const session = useSession();
   const { farm } = useFarmStore((state) => state);
-  const menuList = getMenuList(
-    pathname,
-    session.data?.user.role as UserRole,
-    farm
+
+  const menuList = useMemo(
+    () => getMenuList(pathname, session.data?.user.role as UserRole, farm),
+    [pathname, session.data?.user.role, farm]
   );
 
   return (
@@ -76,7 +77,9 @@ export function Menu({ isOpen }: MenuProps) {
                               <Link href={href}>
                                 <span
                                   className={cn(isOpen === false ? "" : "mr-4")}
-                                ></span>
+                                >
+                                  <Icon size={24} />
+                                </span>
                                 <p
                                   className={cn(
                                     "max-w-[200px] truncate",

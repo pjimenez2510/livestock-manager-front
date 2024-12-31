@@ -26,45 +26,7 @@ import { TablePagination } from "./table-pagination";
 import { AnimalService } from "@/features/animals/services/animal.service";
 import queryClient from "@/core/infrastructure/react-query/query-client";
 import { QUERY_KEYS } from "@/shared/api/query-key";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-
-interface UpdateDialogProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  onConfirm: () => Promise<void>;
-  title: string;
-  description: string;
-}
-
-const UpdateDialog = ({
-  isOpen,
-  onOpenChange,
-  onConfirm,
-  title,
-  description,
-}: UpdateDialogProps) => (
-  <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
-    <AlertDialogContent>
-      <AlertDialogHeader>
-        <AlertDialogTitle>{title}</AlertDialogTitle>
-        <AlertDialogDescription>{description}</AlertDialogDescription>
-      </AlertDialogHeader>
-      <AlertDialogFooter>
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction onClick={onConfirm}>Continue</AlertDialogAction>
-      </AlertDialogFooter>
-    </AlertDialogContent>
-  </AlertDialog>
-);
+import { UpdateDialog } from "./update-dialog";
 
 interface AnimalTableProps {
   animals: Animal[];

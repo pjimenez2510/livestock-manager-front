@@ -8,21 +8,27 @@ import queryClient from "@/core/infrastructure/react-query/query-client";
 import { Event } from "../interfaces/event.interface";
 import { EventService } from "../services/event.service";
 
-const schema = z.object({
-  title: z.string().min(1, "El nombre del evento es requerido"),
-  description: z.string().optional(),
-  color: z.string().min(1, "El color del evento es requerido"),
-  startDate: z.date(),
-  endDate: z.date(),
-});
+const schema = z
+  .object({
+    title: z.string().min(1, "El nombre del evento es requerido"),
+    description: z.string().optional(),
+    color: z.string().min(1, "El color del evento es requerido"),
+    startDate: z.date(),
+    endDate: z.date({ required_error: "La fecha de fin es requerida" }),
+  })
+  .refine((data) => data.startDate < data.endDate, {
+    path: ["startDate"],
+    message: "La fecha de inicio debe ser menor a la fecha de fin",
+  });
 
 type FormFields = z.infer<typeof schema>;
 
 interface FormProps {
   event?: Event;
+  handleDialogClose: () => void;
 }
 
-export const useEventForm = ({ event }: FormProps) => {
+export const useEventForm = ({ event, handleDialogClose }: FormProps) => {
   const methods = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -44,6 +50,7 @@ export const useEventForm = ({ event }: FormProps) => {
         })
         .then(() => {
           queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.EVENTS] });
+          handleDialogClose();
         })
         .catch((error) => {
           console.error(error);
@@ -57,6 +64,7 @@ export const useEventForm = ({ event }: FormProps) => {
         endDate: new Date(data.endDate),
       })
       .then(() => {
+        handleDialogClose();
         queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.EVENTS] });
       })
       .catch((error) => {

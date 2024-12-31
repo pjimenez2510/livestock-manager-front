@@ -3,148 +3,180 @@ import { UserRole } from "@/features/users/interfaces/user.interface";
 import { CiGrid42 } from "react-icons/ci";
 import { GiCow } from "react-icons/gi";
 import { IconType } from "react-icons/lib";
-import { TbVaccine } from "react-icons/tb";
-import { TbPaw } from "react-icons/tb";
+import { LuCalendar } from "react-icons/lu";
+import { TbVaccine, TbPaw } from "react-icons/tb";
 
-type Submenu = {
+interface Submenu {
   href: string;
   label: string;
   active: boolean;
-  roles: UserRole[];
-};
+  roles: Set<UserRole>;
+}
 
-type Menu = {
+interface Menu {
   href: string;
   label: string;
-
   active: boolean;
-  roles: UserRole[];
+  roles: Set<UserRole>;
   icon: IconType;
   submenus: Submenu[];
-};
+}
 
-type Group = {
+interface Group {
   groupLabel: string;
   menus: Menu[];
-};
+}
 
-const getAllMenuList = (pathname: string, farm?: Farm) => {
+const menuCache = new Map<string, Group[]>();
+
+const createFarmUrl = (idFarm: number | undefined, path: string) =>
+  `/management/farm/${idFarm}/${path}`;
+
+const isPathActive = (pathname: string, path: string) =>
+  pathname.startsWith(path);
+
+const createSubmenu = (
+  href: string,
+  label: string,
+  pathname: string,
+  roles: UserRole[]
+): Submenu => ({
+  href,
+  label,
+  active: isPathActive(pathname, href),
+  roles: new Set(roles),
+});
+
+const getAllMenuList = (pathname: string, farm?: Farm): Group[] => {
+  const cacheKey = `${pathname}-${farm?.id}`;
+
+  const cachedMenu = menuCache.get(cacheKey);
+  if (cachedMenu) {
+    return cachedMenu;
+  }
+
   const idFarm = farm?.id;
-  const nameFarm = farm?.name;
+  const defaultRoles = [UserRole.Admin, UserRole.User];
+
+  if (!idFarm) {
+    return createAdminMenu(pathname);
+  }
+
   const allMenus: Group[] = [
     {
-      groupLabel: `${nameFarm}`,
+      groupLabel: farm.name ?? "",
       menus: [
         {
-          href: `/management/farm/${idFarm}/lot`,
+          href: createFarmUrl(idFarm, "lot"),
           label: "Lotes",
-          active: pathname.startsWith(`/management/farm/${idFarm}/lot`),
-          roles: [UserRole.Admin, UserRole.User],
+          active: isPathActive(pathname, createFarmUrl(idFarm, "lot")),
+          roles: new Set(defaultRoles),
           icon: CiGrid42,
           submenus: [
-            {
-              href: `/management/farm/${idFarm}/lot/list`,
-              label: "Listar",
-              active: pathname.startsWith(
-                `/management/farm/${idFarm}/lot/list`
-              ),
-              roles: [UserRole.Admin, UserRole.User],
-            },
-            {
-              href: `/management/farm/${idFarm}/lot/create`,
-              label: "Crear",
-              active: pathname.startsWith(
-                `/management/farm/${idFarm}/lot/create`
-              ),
-              roles: [UserRole.Admin, UserRole.User],
-            },
+            createSubmenu(
+              createFarmUrl(idFarm, "lot/list"),
+              "Listar",
+              pathname,
+              defaultRoles
+            ),
+            createSubmenu(
+              createFarmUrl(idFarm, "lot/create"),
+              "Crear",
+              pathname,
+              defaultRoles
+            ),
           ],
         },
         {
-          href: `/management/farm/${idFarm}/animal`,
+          href: createFarmUrl(idFarm, "animal"),
           label: "Animales",
-          active: pathname.startsWith(`/management/farm/${idFarm}/animal`),
-          roles: [UserRole.Admin, UserRole.User],
+          active: isPathActive(pathname, createFarmUrl(idFarm, "animal")),
+          roles: new Set(defaultRoles),
           icon: GiCow,
           submenus: [
-            {
-              href: `/management/farm/${idFarm}/animal/list`,
-              label: "Listar",
-              active: pathname.startsWith(
-                `/management/farm/${idFarm}/animal/list`
-              ),
-              roles: [UserRole.Admin, UserRole.User],
-            },
-            {
-              href: `/management/farm/${idFarm}/animal/create`,
-              label: "Crear",
-              active: pathname.startsWith(
-                `/management/farm/${idFarm}/animal/create`
-              ),
-              roles: [UserRole.Admin, UserRole.User],
-            },
+            createSubmenu(
+              createFarmUrl(idFarm, "animal/list"),
+              "Listar",
+              pathname,
+              defaultRoles
+            ),
+            createSubmenu(
+              createFarmUrl(idFarm, "animal/create"),
+              "Crear",
+              pathname,
+              defaultRoles
+            ),
           ],
         },
       ],
     },
+    ...createAdminMenu(pathname),
+  ];
 
+  menuCache.set(cacheKey, allMenus);
+  return allMenus;
+};
+
+const createAdminMenu = (pathname: string): Group[] => {
+  const defaultRoles = [UserRole.Admin, UserRole.User];
+
+  return [
     {
       groupLabel: "Administración",
       menus: [
         {
           href: "/management/vaccine",
           label: "Vacunas",
-          active: pathname.startsWith("/management/vaccine"),
-          roles: [UserRole.Admin, UserRole.User],
+          active: isPathActive(pathname, "/management/vaccine"),
+          roles: new Set(defaultRoles),
           icon: TbVaccine,
           submenus: [
-            {
-              href: "/management/vaccine/list",
-              label: "Listar",
-              active: pathname.startsWith("/management/vaccine/list"),
-              roles: [UserRole.Admin, UserRole.User],
-            },
-            {
-              href: "/management/vaccine/create",
-              label: "Crear",
-              active: pathname.startsWith("/management/vaccine/create"),
-              roles: [UserRole.Admin, UserRole.User],
-            },
+            createSubmenu(
+              "/management/vaccine/list",
+              "Listar",
+              pathname,
+              defaultRoles
+            ),
+            createSubmenu(
+              "/management/vaccine/create",
+              "Crear",
+              pathname,
+              defaultRoles
+            ),
           ],
         },
         {
           href: "/management/breed",
           label: "Razas",
-          active: pathname.startsWith("/management/breed"),
-          roles: [UserRole.Admin, UserRole.User],
+          active: isPathActive(pathname, "/management/breed"),
+          roles: new Set(defaultRoles),
           icon: TbPaw,
           submenus: [
-            {
-              href: "/management/breed/list",
-              label: "Listar",
-              active: pathname.startsWith("/management/breed/list"),
-              roles: [UserRole.Admin, UserRole.User],
-            },
-            {
-              href: "/management/breed/create",
-              label: "Crear",
-              active: pathname.startsWith("/management/breed/create"),
-              roles: [UserRole.Admin, UserRole.User],
-            },
+            createSubmenu(
+              "/management/breed/list",
+              "Listar",
+              pathname,
+              defaultRoles
+            ),
+            createSubmenu(
+              "/management/breed/create",
+              "Crear",
+              pathname,
+              defaultRoles
+            ),
           ],
         },
         {
           href: "/management/agenda",
           label: "Agenda",
-          active: pathname.startsWith("/management/agenda"),
-          roles: [UserRole.Admin, UserRole.User],
-          icon: TbPaw,
+          active: isPathActive(pathname, "/management/agenda"),
+          roles: new Set(defaultRoles),
+          icon: LuCalendar,
           submenus: [],
         },
       ],
     },
   ];
-  return allMenus;
 };
 
 export const getMenuList = (
@@ -160,12 +192,10 @@ export const getMenuList = (
     .map((group) => ({
       ...group,
       menus: group.menus
-        .filter((menu) => menu.roles.includes(role))
+        .filter((menu) => menu.roles.has(role))
         .map((menu) => ({
           ...menu,
-          submenus: menu.submenus.filter((submenu) =>
-            submenu.roles.includes(role)
-          ),
+          submenus: menu.submenus.filter((submenu) => submenu.roles.has(role)),
         })),
     }))
     .filter((group) => group.menus.length > 0);
